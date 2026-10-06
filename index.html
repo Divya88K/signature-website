@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Digital Signature Verification System</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav id="nav"><b>🔏 SignVerify</b>
+<button data-p="home">Home</button><button data-p="keys">Keys</button><button data-p="sign">Sign</button><button data-p="verify">Verify</button></nav>
+<main>
+
+<section id="home">
+ <div class="card"><h1>Digital Signature Verification System</h1>
+ <p>A defence equipment supplier exchanges contracts electronically. A digital signature proves a document is authentic and has <b>not been modified</b> since it was signed.</p>
+ <button class="btn" data-go="keys">Get started</button></div>
+ <div class="card"><h2>Workflow</h2><ol class="steps">
+ <li><b>Generate keys</b> – RSA-2048 key pair, created inside your browser.</li>
+ <li><b>Sign</b> – the document is hashed with SHA-256 and signed with RSA-PSS.</li>
+ <li><b>Download</b> the small <code>.sig</code> file.</li>
+ <li><b>Verify</b> – document + signature + public key → <b>VALID</b> or <b>INVALID</b>.</li></ol></div>
+ <div class="card"><h2>Security notes</h2><ul>
+ <li>RSA-PSS with SHA-256 (not textbook RSA), using the browser's Web Crypto API.</li>
+ <li>The private key is <b>non-extractable</b>: it cannot be read, shown or downloaded, even by this page's own code, and nothing is ever uploaded to a server.</li>
+ <li>Files are checked for type, size, emptiness and file signature before use.</li></ul></div>
+</section>
+
+<section id="keys"><div class="card"><h1>Generate keys</h1>
+ <p>Creates an RSA-2048 key pair for this browser session. The private key stays in memory and is lost when you close or refresh the page, so sign before you leave. Save the public key to verify later.</p>
+ <button class="btn" id="genBtn">Generate RSA-2048 key pair</button>
+ <div id="keyMsg" class="msg" hidden></div>
+ <div id="keyInfo" hidden><label>Public-key fingerprint (SHA-256)</label><div class="mono" id="fp"></div>
+ <label>Public key (PEM)</label><textarea id="pem" readonly style="min-height:9rem"></textarea>
+ <button class="btn alt" id="dlPub">Download public key (.pem)</button></div></div></section>
+
+<section id="sign"><div class="card"><h1>Sign a document</h1>
+ <label for="signFile">Document (.txt .md .pdf .docx .png .jpg, max 5 MB)</label><input type="file" id="signFile">
+ <button class="btn" id="signBtn">Sign document</button>
+ <div id="signMsg" class="msg" hidden></div><div class="mono" id="signHash" hidden></div>
+ <button class="btn alt" id="dlSig" hidden>Download signature (.sig)</button></div></section>
+
+<section id="verify"><div class="card"><h1>Verify a document</h1>
+ <label for="vDoc">Document</label><input type="file" id="vDoc">
+ <label for="vSig">Signature file (.sig)</label><input type="file" id="vSig" accept=".sig">
+ <label for="vKey">Public key (.pem) – leave empty to use this session's key</label><input type="file" id="vKey" accept=".pem">
+ <button class="btn" id="verBtn">Verify</button>
+ <div id="verMsg" class="msg" hidden></div><div id="verRes" class="result" hidden></div><div class="mono" id="verHash" hidden></div></div></section>
+
+</main>
+<footer>College microproject – RSA-2048 · SHA-256 · RSA-PSS – demonstration only.</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
